@@ -14,4 +14,50 @@
 
 我基于的环境为cdh5.7.0，
 
-hadoop --config /etc/hadoop/conf jar mapreduce-demo-job.jar -libjars mysql-connector-java-5.1.35.jar
+一、第三方jar的引用方式：
+1、mysql-connector-java-5.1.35.jar放入$HADOOP_HOME/lib下面（如果是CDH安装$HADOOP_HOME=/opt/cloudera/parcels/CDH/lib/hadoop/lib）
+2、重新启动：HDFS、MapReduce 生效
+
+[root@master wuzhong]# hadoop jar mapreduce-demo-job.jar
+16/04/29 11:57:27 INFO mapred.JobClient: Running job: job_201604291156_0001
+16/04/29 11:57:28 INFO mapred.JobClient:  map 0% reduce 0%
+16/04/29 11:57:45 INFO mapred.JobClient:  map 50% reduce 0%
+16/04/29 11:57:48 INFO mapred.JobClient:  map 100% reduce 0%
+16/04/29 11:57:55 INFO mapred.JobClient:  map 100% reduce 100%
+16/04/29 11:57:56 INFO mapred.JobClient: Job complete: job_201604291156_0001
+16/04/29 11:57:56 INFO mapred.JobClient: Counters: 31
+16/04/29 11:57:56 INFO mapred.JobClient:   File System Counters
+16/04/29 11:57:56 INFO mapred.JobClient:     FILE: Number of bytes read=70
+16/04/29 11:57:56 INFO mapred.JobClient:     FILE: Number of bytes written=644055
+16/04/29 11:57:56 INFO mapred.JobClient:     FILE: Number of read operations=0
+16/04/29 11:57:56 INFO mapred.JobClient:     FILE: Number of large read operations=0
+16/04/29 11:57:56 INFO mapred.JobClient:     FILE: Number of write operations=0
+16/04/29 11:57:56 INFO mapred.JobClient:     HDFS: Number of bytes read=156
+16/04/29 11:57:56 INFO mapred.JobClient:     HDFS: Number of bytes written=45
+16/04/29 11:57:56 INFO mapred.JobClient:     HDFS: Number of read operations=2
+16/04/29 11:57:56 INFO mapred.JobClient:     HDFS: Number of large read operations=0
+16/04/29 11:57:56 INFO mapred.JobClient:     HDFS: Number of write operations=1
+16/04/29 11:57:56 INFO mapred.JobClient:   Job Counters
+16/04/29 11:57:56 INFO mapred.JobClient:     Launched map tasks=2
+16/04/29 11:57:56 INFO mapred.JobClient:     Launched reduce tasks=1
+16/04/29 11:57:56 INFO mapred.JobClient:     Total time spent by all maps in occupied slots (ms)=18684
+16/04/29 11:57:56 INFO mapred.JobClient:     Total time spent by all reduces in occupied slots (ms)=4001
+16/04/29 11:57:56 INFO mapred.JobClient:     Total time spent by all maps waiting after reserving slots (ms)=0
+16/04/29 11:57:56 INFO mapred.JobClient:     Total time spent by all reduces waiting after reserving slots (ms)=0
+16/04/29 11:57:56 INFO mapred.JobClient:   Map-Reduce Framework
+16/04/29 11:57:56 INFO mapred.JobClient:     Map input records=2
+16/04/29 11:57:56 INFO mapred.JobClient:     Map output records=2
+16/04/29 11:57:56 INFO mapred.JobClient:     Map output bytes=57
+16/04/29 11:57:56 INFO mapred.JobClient:     Input split bytes=156
+16/04/29 11:57:56 INFO mapred.JobClient:     Combine input records=2
+16/04/29 11:57:56 INFO mapred.JobClient:     Combine output records=2
+16/04/29 11:57:56 INFO mapred.JobClient:     Reduce input groups=2
+16/04/29 11:57:56 INFO mapred.JobClient:     Reduce shuffle bytes=87
+16/04/29 11:57:56 INFO mapred.JobClient:     Reduce input records=2
+16/04/29 11:57:56 INFO mapred.JobClient:     Reduce output records=2
+16/04/29 11:57:56 INFO mapred.JobClient:     Spilled Records=4
+16/04/29 11:57:56 INFO mapred.JobClient:     CPU time spent (ms)=7990
+16/04/29 11:57:56 INFO mapred.JobClient:     Physical memory (bytes) snapshot=1057763328
+16/04/29 11:57:56 INFO mapred.JobClient:     Virtual memory (bytes) snapshot=5090312192
+16/04/29 11:57:56 INFO mapred.JobClient:     Total committed heap usage (bytes)=892862464
+

@@ -33,6 +33,7 @@
     <build>
         <finalName>${project.artifactId}</finalName>
         <resources>
+            <!-- 本机调试去掉-->
             <resource>
                 <directory>src/main/resources</directory>
                 <excludes>

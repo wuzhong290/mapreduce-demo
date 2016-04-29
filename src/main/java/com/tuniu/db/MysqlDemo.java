@@ -1,6 +1,7 @@
 package com.tuniu.db;
 
 import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.filecache.DistributedCache;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.LongWritable;
@@ -11,6 +12,7 @@ import org.apache.hadoop.mapreduce.Reducer;
 import org.apache.hadoop.mapreduce.lib.db.DBConfiguration;
 import org.apache.hadoop.mapreduce.lib.db.DBInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
+import org.apache.hadoop.util.ClassUtil;
 import org.apache.hadoop.util.GenericOptionsParser;
 
 import java.io.IOException;
@@ -23,12 +25,10 @@ public class MysqlDemo {
     public static void main(String[] args) throws Exception{
         Configuration conf = new Configuration();
         String[] otherArgs = new GenericOptionsParser(conf,args).getRemainingArgs();
-        //DistributedCache.addFileToClassPath(new Path("hdfs://master.spark.com:8020/hdfsPath/mysql-connector-java-5.1.35.jar"), conf);
         //先删除output目录
         deleteDir(conf, "hdfs://master.spark.com:8020/apps/output");
         DBConfiguration.configureDB(conf, "com.mysql.jdbc.Driver",
                 "jdbc:mysql://10.10.30.200:3306/d_mob?zeroDateTimeBehavior=convertToNull", "mobtest", "tuniu520");
-
         Job job = Job.getInstance(conf,"mysqldemo");
         FileOutputFormat.setOutputPath(job, new Path("hdfs://master.spark.com:8020/apps/output"));
         String [] fields = {"id", "name", "gender", "number"};
