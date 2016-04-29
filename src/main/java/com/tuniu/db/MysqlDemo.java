@@ -1,6 +1,7 @@
 package com.tuniu.db;
 
 import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.filecache.DistributedCache;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.LongWritable;
@@ -24,6 +25,7 @@ public class MysqlDemo {
         Configuration conf = new Configuration();
         String[] otherArgs = new GenericOptionsParser(conf,args).getRemainingArgs();
         //先删除output目录
+        DistributedCache.addFileToClassPath(new Path("/hdfsPath/mysql-connector-java-5.1.35.jar"), conf);
         deleteDir(conf, "hdfs://master.spark.com:8020/apps/output");
         DBConfiguration.configureDB(conf, "com.mysql.jdbc.Driver",
                 "jdbc:mysql://10.10.30.200:3306/d_mob?zeroDateTimeBehavior=convertToNull", "mobtest", "tuniu520");

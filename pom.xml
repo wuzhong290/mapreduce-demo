@@ -11,12 +11,12 @@
         <dependency>
             <groupId>org.apache.hadoop</groupId>
             <artifactId>hadoop-common</artifactId>
-            <version>2.6.0</version>
+            <version>2.6.0-cdh5.7.0</version>
         </dependency>
         <dependency>
             <groupId>org.apache.hadoop</groupId>
-            <artifactId>hadoop-mapreduce-client-jobclient</artifactId>
-            <version>2.6.0</version>
+            <artifactId>hadoop-core</artifactId>
+            <version>2.6.0-mr1-cdh5.7.0</version>
         </dependency>
         <dependency>
             <groupId>commons-cli</groupId>
@@ -29,6 +29,55 @@
             <version>5.1.35</version>
         </dependency>
     </dependencies>
+
+    <repositories>
+        <repository>
+            <id>lilyproject.snapshot</id>
+            <name>Lily Maven snapshot repository</name>
+            <url>http://lilyproject.org/maven/maven2/deploy/</url>
+        </repository>
+
+
+        <repository>
+            <id>cdh.repo</id>
+            <url>https://repository.cloudera.com/artifactory/cloudera-repos</url>
+            <name>Cloudera Repositories</name>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+
+        <repository>
+            <id>cdh.snapshots.repo</id>
+            <url>https://repository.cloudera.com/artifactory/libs-snapshot-local</url>
+            <name>Cloudera Snapshots Repository</name>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
+        </repository>
+
+        <repository>
+            <id>ngdata.oss-releases</id>
+            <name>NGDATA OSS Releases</name>
+            <url>http://mvnrepo.ngdata.com/content/repositories/oss-releases</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+
+        <repository>
+            <id>maven.tempo-db.com</id>
+            <url>http://maven.tempo-db.com/artiferactory/list/twitter/</url>
+        </repository>
+        <repository>
+            <id>maven.oschina.net</id>
+            <url>http://maven.oschina.net/content/groups/public/</url>
+        </repository>
+
+    </repositories>
 
     <build>
         <finalName>${project.artifactId}</finalName>

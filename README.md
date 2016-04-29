@@ -17,6 +17,22 @@
 一、第三方jar的引用方式步骤（这种方式不够灵活）：
 1、mysql-connector-java-5.1.35.jar放入$HADOOP_HOME/lib下面（如果是CDH安装$HADOOP_HOME=/opt/cloudera/parcels/CDH/lib/hadoop/lib）
 2、重新启动：HDFS、MapReduce 生效
+二、export HADOOP_CLASSPATH=/home/hadooplib不起作用
+
+三、-libjars无效
+hadoop jar mapreduce-demo-job.jar -libjars /home/hadooplib/mysql-connector-java-5.1.35.jar
+hadoop jar mapreduce-demo-job.jar -files /home/hadooplib/mysql-connector-java-5.1.35.jar
+
+
+四、fatjar无效
+
+
+通过命令行参数传递jar文件, 如-libjars等;
+直接在conf中设置, 如conf.set(“tmpjars”,*.jar), jar文件用逗号隔开;
+利用分布式缓存, 如DistributedCache.addArchiveToClassPath(path, job), 此处的path必须是hdfs, 即自己讲jar上传到hdfs上, 然后将路径加入到分布式缓存中;
+第三方jar文件和自己的程序打包到一个jar文件中, 程序通过job.getJar()将获得整个文件并将其传至hdfs上. (很笨重)
+在每台机器的$HADOOP_HOME/lib目录中加入jar文件. (不推荐)
+
 
 
 [root@master wuzhong]# hadoop jar mapreduce-demo-job.jar
@@ -80,5 +96,13 @@ CREATE TABLE `Student` (
 [root@master wuzhong]# hadoop fs -cat /apps/output/part-r-00000
 1       name gender number
 2       name1 gender2 number2
+
+
+
+export HADOOP_ROOT_LOGGER=DEBUG,console
+export HADOOP_ROOT_LOGGER=INFO,console
+
+export HADOOP_USE_CLIENT_CLASSLOADER=""
+export HADOOP_USE_CLIENT_CLASSLOADER=true
 
 
