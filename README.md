@@ -14,9 +14,10 @@
 
 我基于的环境为cdh5.7.0，
 
-一、第三方jar的引用方式：
+一、第三方jar的引用方式步骤（这种方式不够灵活）：
 1、mysql-connector-java-5.1.35.jar放入$HADOOP_HOME/lib下面（如果是CDH安装$HADOOP_HOME=/opt/cloudera/parcels/CDH/lib/hadoop/lib）
 2、重新启动：HDFS、MapReduce 生效
+
 
 [root@master wuzhong]# hadoop jar mapreduce-demo-job.jar
 16/04/29 11:57:27 INFO mapred.JobClient: Running job: job_201604291156_0001
@@ -60,4 +61,24 @@
 16/04/29 11:57:56 INFO mapred.JobClient:     Physical memory (bytes) snapshot=1057763328
 16/04/29 11:57:56 INFO mapred.JobClient:     Virtual memory (bytes) snapshot=5090312192
 16/04/29 11:57:56 INFO mapred.JobClient:     Total committed heap usage (bytes)=892862464
+
+
+
+CREATE TABLE `Student` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT,
+  `name` VARCHAR(32) NOT NULL DEFAULT '' COMMENT 'name',
+  `gender` VARCHAR(32) NOT NULL DEFAULT '' COMMENT 'gender',
+  `number` VARCHAR(32) NOT NULL DEFAULT '' COMMENT 'number',
+  PRIMARY KEY (`id`)
+) ENGINE=INNODB DEFAULT CHARSET=utf8 COMMENT='Student';
+
+    id  name    gender   number
+------  ------  -------  ---------
+     1  name    gender   number
+     2  name1   gender2  number2
+
+[root@master wuzhong]# hadoop fs -cat /apps/output/part-r-00000
+1       name gender number
+2       name1 gender2 number2
+
 
