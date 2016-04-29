@@ -47,7 +47,7 @@ public class WordCount {
 
 
     /**
-     * 删除指定目录
+     * 鍒犻櫎鎸囧畾鐩綍
      *
      * @param conf
      * @param dirPath
@@ -75,7 +75,7 @@ public class WordCount {
             System.exit(2);
         }
 
-        //先删除output目录
+        //鍏堝垹闄utput鐩綍
         deleteDir(conf, otherArgs[otherArgs.length - 1]);
 
         Job job = Job.getInstance(conf, "word count");

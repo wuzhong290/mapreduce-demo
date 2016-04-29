@@ -13,3 +13,5 @@
 这样就可以在本机上调试mapreduce程序了。
 
 我基于的环境为cdh5.7.0，
+
+hadoop --config /etc/hadoop/conf jar mapreduce-demo-job.jar -libjars mysql-connector-java-5.1.35.jar
