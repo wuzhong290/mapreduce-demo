@@ -1,6 +1,9 @@
 package com.tuniu.db;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.conf.Configured;
 import org.apache.hadoop.filecache.DistributedCache;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
@@ -12,20 +15,29 @@ import org.apache.hadoop.mapreduce.Reducer;
 import org.apache.hadoop.mapreduce.lib.db.DBConfiguration;
 import org.apache.hadoop.mapreduce.lib.db.DBInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
-import org.apache.hadoop.util.GenericOptionsParser;
+import org.apache.hadoop.util.Tool;
+import org.apache.hadoop.util.ToolRunner;
 
 import java.io.IOException;
 
 /**
  * Created by wuzhong on 2016/4/29.
  */
-public class MysqlDemo {
+public class MysqlDemo extends Configured implements Tool {
+
+    private static final Log LOG = LogFactory.getLog(MysqlDemo.class);
 
     public static void main(String[] args) throws Exception{
-        Configuration conf = new Configuration();
-        String[] otherArgs = new GenericOptionsParser(conf,args).getRemainingArgs();
+        int res = ToolRunner.run(new Configuration(), new MysqlDemo(), args);
+        System.exit(res);
+    }
+
+    @Override
+    public int run(String[] args) throws Exception {
+        Configuration conf = getConf();
+        DistributedCache.addFileToClassPath(new Path("/hdfsPath/mysql-connector-java-5.1.35.jar"), conf,FileSystem.get(conf));
+        conf.set("mapred.job.tracker", "master.spark.com:8021");
         //先删除output目录
-        DistributedCache.addFileToClassPath(new Path("/hdfsPath/mysql-connector-java-5.1.35.jar"), conf);
         deleteDir(conf, "hdfs://master.spark.com:8020/apps/output");
         DBConfiguration.configureDB(conf, "com.mysql.jdbc.Driver",
                 "jdbc:mysql://10.10.30.200:3306/d_mob?zeroDateTimeBehavior=convertToNull", "mobtest", "tuniu520");
@@ -33,16 +45,15 @@ public class MysqlDemo {
         FileOutputFormat.setOutputPath(job, new Path("hdfs://master.spark.com:8020/apps/output"));
         String [] fields = {"id", "name", "gender", "number"};
         DBInputFormat.setInput(job, StudentRecord.class, "Student", null, "id", fields);
-        job.setJarByClass(MysqlDemo.class);
+        job.setJarByClass(DBAccessMapper.class);
         job.setMapperClass(DBAccessMapper.class);
         job.setCombinerClass(IdentityReducer.class);
         job.setReducerClass(IdentityReducer.class);
         job.setOutputKeyClass(LongWritable.class);
         job.setOutputValueClass(Text.class);
         job.setInputFormatClass(DBInputFormat.class);
-        System.exit(job.waitForCompletion(true) ? 0 : 1);
+        return job.waitForCompletion(true) ? 0 : 1;
     }
-
 
     private static void deleteDir(Configuration conf, String dirPath) throws IOException {
         FileSystem fs = FileSystem.get(conf);

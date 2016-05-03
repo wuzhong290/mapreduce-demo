@@ -20,9 +20,13 @@
 二、export HADOOP_CLASSPATH=/home/hadooplib不起作用
 
 三、-libjars无效
+hadoop fs -rm -r  /user/root/.staging/*
+hadoop fs -rm -r  /user/root/.Trash/*
 hadoop jar mapreduce-demo-job.jar -libjars /home/hadooplib/mysql-connector-java-5.1.35.jar
 hadoop jar mapreduce-demo-job.jar -files /home/hadooplib/mysql-connector-java-5.1.35.jar
 
+
+scp mapreduce-demo-job.jar  root@192.168.120.129:/home/wuzhong/mapreduce-demo-job.jar
 
 四、fatjar无效
 

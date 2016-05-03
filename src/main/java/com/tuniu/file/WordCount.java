@@ -1,4 +1,4 @@
-package com.tuniu;
+package com.tuniu.file;
 
 import java.io.IOException;
 import java.util.StringTokenizer;
