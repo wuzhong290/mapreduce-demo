@@ -26,6 +26,8 @@ hadoop jar mapreduce-demo-job.jar -libjars /home/hadooplib/mysql-connector-java-
 hadoop jar mapreduce-demo-job.jar -files /home/hadooplib/mysql-connector-java-5.1.35.jar
 
 
+hadoop jar mapreduce-demo-job.jar hdfs://master.spark.com:8020/apps/input/HadoopFile0.txt hdfs://master.spark.com:8020/apps/output
+
 scp mapreduce-demo-job.jar  root@192.168.120.129:/home/wuzhong/mapreduce-demo-job.jar
 
 四、fatjar无效
