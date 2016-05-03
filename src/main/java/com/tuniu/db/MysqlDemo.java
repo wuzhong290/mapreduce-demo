@@ -35,8 +35,6 @@ public class MysqlDemo extends Configured implements Tool {
     @Override
     public int run(String[] args) throws Exception {
         Configuration conf = getConf();
-        DistributedCache.addFileToClassPath(new Path("/hdfsPath/mysql-connector-java-5.1.35.jar"), conf,FileSystem.get(conf));
-        conf.set("mapred.job.tracker", "master.spark.com:8021");
         //先删除output目录
         deleteDir(conf, "hdfs://master.spark.com:8020/apps/output");
         DBConfiguration.configureDB(conf, "com.mysql.jdbc.Driver",
@@ -52,6 +50,7 @@ public class MysqlDemo extends Configured implements Tool {
         job.setOutputKeyClass(LongWritable.class);
         job.setOutputValueClass(Text.class);
         job.setInputFormatClass(DBInputFormat.class);
+        LOG.info(job.getConfiguration().get("tmpjars"));
         return job.waitForCompletion(true) ? 0 : 1;
     }
 
