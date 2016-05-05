@@ -13,13 +13,13 @@
 这样就可以在本机上调试mapreduce程序了。
 
 我基于的环境为cdh5.7.0，
+三、第三方jar的应用方式
+1、第三方jar的引用方式步骤（这种方式不够灵活）：
+1.1、mysql-connector-java-5.1.35.jar放入$HADOOP_HOME/lib下面（如果是CDH安装$HADOOP_HOME=/opt/cloudera/parcels/CDH/lib/hadoop/lib）
+1.2、重新启动：HDFS、MapReduce 生效
+2、export HADOOP_CLASSPATH=/home/hadooplib/* 起作用
 
-一、第三方jar的引用方式步骤（这种方式不够灵活）：
-1、mysql-connector-java-5.1.35.jar放入$HADOOP_HOME/lib下面（如果是CDH安装$HADOOP_HOME=/opt/cloudera/parcels/CDH/lib/hadoop/lib）
-2、重新启动：HDFS、MapReduce 生效
-二、export HADOOP_CLASSPATH=/home/hadooplib不起作用
-
-三、-libjars无效
+3、-libjars
 hadoop fs -rm -r  /user/root/.staging/*
 hadoop fs -rm -r  /user/root/.Trash/*
 hadoop jar mapreduce-demo-job.jar -libjars /home/hadooplib/mysql-connector-java-5.1.35.jar
@@ -30,7 +30,10 @@ hadoop jar mapreduce-demo-job.jar hdfs://master.spark.com:8020/apps/input/Hadoop
 
 scp mapreduce-demo-job.jar  root@192.168.120.129:/home/wuzhong/mapreduce-demo-job.jar
 
-四、fatjar无效
+4、fatjar
+通过java.lang.Class.forName(Class.java:190)获取mysql驱动，不是map、reduce阶段使用，所有fatjar方式引用的第三方jar无效，不需放入classpath中，也就是通过设置HADOOP_CLASSPATH
+
+如果是在map、reduce阶段使用第三方jar就生效，例如：com.mysql.jdbc.StringUtils LOG.info(StringUtils.consistentToString(new BigDecimal(10000)));
 
 
 通过命令行参数传递jar文件, 如-libjars等;
@@ -110,5 +113,55 @@ export HADOOP_ROOT_LOGGER=INFO,console
 
 export HADOOP_USE_CLIENT_CLASSLOADER=""
 export HADOOP_USE_CLIENT_CLASSLOADER=true
+
+
+
+[root@master wuzhong]# hadoop jar mapreduce-demo-job.jar
+hdfs://master.spark.com:8020/apps/output has been deleted sucessfullly.
+16/05/04 10:33:51 INFO db.MysqlDemo:
+16/05/04 10:33:51 INFO db.MysqlDemo: /home/wuzhong/mapreduce-demo-job.jar
+16/05/04 10:33:51 INFO db.MysqlDemo: 10000
+16/05/04 10:33:51 INFO mapred.JobClient: Cleaning up the staging area hdfs://master.spark.com:8020/user/root/.staging/job_201605040954_0013
+Exception in thread "main" java.lang.RuntimeException: java.lang.RuntimeException: java.lang.ClassNotFoundException: com.mysql.jdbc.Driver
+        at org.apache.hadoop.mapreduce.lib.db.DBInputFormat.setConf(DBInputFormat.java:158)
+        at org.apache.hadoop.util.ReflectionUtils.setConf(ReflectionUtils.java:73)
+        at org.apache.hadoop.util.ReflectionUtils.newInstance(ReflectionUtils.java:133)
+        at org.apache.hadoop.mapred.JobClient.writeNewSplits(JobClient.java:1104)
+        at org.apache.hadoop.mapred.JobClient.writeSplits(JobClient.java:1124)
+        at org.apache.hadoop.mapred.JobClient.access$600(JobClient.java:178)
+        at org.apache.hadoop.mapred.JobClient$2.run(JobClient.java:1023)
+        at org.apache.hadoop.mapred.JobClient$2.run(JobClient.java:976)
+        at java.security.AccessController.doPrivileged(Native Method)
+        at javax.security.auth.Subject.doAs(Subject.java:415)
+        at org.apache.hadoop.security.UserGroupInformation.doAs(UserGroupInformation.java:1693)
+        at org.apache.hadoop.mapred.JobClient.submitJobInternal(JobClient.java:976)
+        at org.apache.hadoop.mapreduce.Job.submit(Job.java:582)
+        at org.apache.hadoop.mapreduce.Job.waitForCompletion(Job.java:612)
+        at com.tuniu.db.MysqlDemo.run(MysqlDemo.java:57)
+        at org.apache.hadoop.util.ToolRunner.run(ToolRunner.java:70)
+        at com.tuniu.db.MysqlDemo.main(MysqlDemo.java:32)
+        at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+        at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:57)
+        at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+        at java.lang.reflect.Method.invoke(Method.java:606)
+        at org.apache.hadoop.util.RunJar.run(RunJar.java:221)
+        at org.apache.hadoop.util.RunJar.main(RunJar.java:136)
+Caused by: java.lang.RuntimeException: java.lang.ClassNotFoundException: com.mysql.jdbc.Driver
+        at org.apache.hadoop.mapreduce.lib.db.DBInputFormat.getConnection(DBInputFormat.java:184)
+        at org.apache.hadoop.mapreduce.lib.db.DBInputFormat.setConf(DBInputFormat.java:152)
+        ... 22 more
+Caused by: java.lang.ClassNotFoundException: com.mysql.jdbc.Driver
+        at java.net.URLClassLoader$1.run(URLClassLoader.java:366)
+        at java.net.URLClassLoader$1.run(URLClassLoader.java:355)
+        at java.security.AccessController.doPrivileged(Native Method)
+        at java.net.URLClassLoader.findClass(URLClassLoader.java:354)
+        at java.lang.ClassLoader.loadClass(ClassLoader.java:425)
+        at sun.misc.Launcher$AppClassLoader.loadClass(Launcher.java:308)
+        at java.lang.ClassLoader.loadClass(ClassLoader.java:358)
+        at java.lang.Class.forName0(Native Method)
+        at java.lang.Class.forName(Class.java:190)
+        at org.apache.hadoop.mapreduce.lib.db.DBConfiguration.getConnection(DBConfiguration.java:143)
+        at org.apache.hadoop.mapreduce.lib.db.DBInputFormat.getConnection(DBInputFormat.java:178)
+        ... 23 more
 
 

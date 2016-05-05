@@ -1,5 +1,6 @@
 package com.tuniu.db;
 
+import com.mysql.jdbc.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.hadoop.conf.Configuration;
@@ -18,6 +19,7 @@ import org.apache.hadoop.util.Tool;
 import org.apache.hadoop.util.ToolRunner;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 
 /**
  * Created by wuzhong on 2016/4/29.
@@ -50,6 +52,8 @@ public class MysqlDemo extends Configured implements Tool {
         job.setOutputValueClass(Text.class);
         job.setInputFormatClass(DBInputFormat.class);
         LOG.info(job.getConfiguration().get("tmpjars"));
+        LOG.info(job.getJar());
+        LOG.info(StringUtils.consistentToString(new BigDecimal(10000)));
         return job.waitForCompletion(true) ? 0 : 1;
     }
 
@@ -70,6 +74,7 @@ public class MysqlDemo extends Configured implements Tool {
     public static class DBAccessMapper extends Mapper<LongWritable, StudentRecord, LongWritable, Text>{
         @Override
         protected void map(LongWritable key, StudentRecord value, Context context) throws IOException, InterruptedException {
+            LOG.info(StringUtils.consistentToString(new BigDecimal(10000)));
             context.write(new LongWritable(value.id), new Text(value
                     .toString()));
         }
@@ -78,6 +83,7 @@ public class MysqlDemo extends Configured implements Tool {
     public static class IdentityReducer extends Reducer<LongWritable,Text,LongWritable,Text>{
         @Override
         protected void reduce(LongWritable key, Iterable<Text> values, Context context) throws IOException, InterruptedException {
+            LOG.info(StringUtils.consistentToString(new BigDecimal(10000)));
             context.write(key,values.iterator().next());
         }
     }
