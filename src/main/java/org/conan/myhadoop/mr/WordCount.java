@@ -58,9 +58,9 @@ public class WordCount {
 
         JobConf conf = new JobConf(WordCount.class);
         conf.setJobName("WordCount");
-        conf.addResource("classpath:/hadoop/core-site.xml");
-        conf.addResource("classpath:/hadoop/hdfs-site.xml");
-        conf.addResource("classpath:/hadoop/mapred-site.xml");
+//        conf.addResource("classpath:/hadoop/core-site.xml");
+//        conf.addResource("classpath:/hadoop/hdfs-site.xml");
+//        conf.addResource("classpath:/hadoop/mapred-site.xml");
 
         conf.setOutputKeyClass(Text.class);
         conf.setOutputValueClass(IntWritable.class);

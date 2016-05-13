@@ -9,7 +9,7 @@ import org.apache.hadoop.mapred.JobConf;
 
 public class PageRankJob {
 
-    public static final String HDFS = "hdfs://192.168.1.210:9000";
+    public static final String HDFS = "hdfs://master.spark.com:8020";
     public static final Pattern DELIMITER = Pattern.compile("[\t,]");
 
     public static void main(String[] args) {
@@ -66,9 +66,9 @@ public class PageRankJob {
     public static JobConf config() {// Hadoop集群的远程配置信息
         JobConf conf = new JobConf(PageRankJob.class);
         conf.setJobName("PageRank");
-        conf.addResource("classpath:/hadoop/core-site.xml");
-        conf.addResource("classpath:/hadoop/hdfs-site.xml");
-        conf.addResource("classpath:/hadoop/mapred-site.xml");
+//        conf.addResource("classpath:/hadoop/core-site.xml");
+//        conf.addResource("classpath:/hadoop/hdfs-site.xml");
+//        conf.addResource("classpath:/hadoop/mapred-site.xml");
         return conf;
     }
 

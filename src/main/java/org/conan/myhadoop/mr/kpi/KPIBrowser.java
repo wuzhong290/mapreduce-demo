@@ -49,14 +49,14 @@ public class KPIBrowser {
     }
 
     public static void main(String[] args) throws Exception {
-        String input = "hdfs://192.168.1.210:9000/user/hdfs/log_kpi";
-        String output = "hdfs://192.168.1.210:9000/user/hdfs/log_kpi/browser";
+        String input = "hdfs://master.spark.com:8020/user/hdfs/log_kpi";
+        String output = "hdfs://master.spark.com:8020/user/hdfs/log_kpi/browser";
 
         JobConf conf = new JobConf(KPIBrowser.class);
         conf.setJobName("KPIBrowser");
-        conf.addResource("classpath:/hadoop/core-site.xml");
-        conf.addResource("classpath:/hadoop/hdfs-site.xml");
-        conf.addResource("classpath:/hadoop/mapred-site.xml");
+//        conf.addResource("classpath:/hadoop/core-site.xml");
+//        conf.addResource("classpath:/hadoop/hdfs-site.xml");
+//        conf.addResource("classpath:/hadoop/mapred-site.xml");
         
         conf.setOutputKeyClass(Text.class);
         conf.setOutputValueClass(IntWritable.class);

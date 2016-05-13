@@ -20,7 +20,7 @@ public class QueueZooKeeper {
     }
 
     public static void doOne() throws Exception {
-        String host1 = "192.168.1.201:2181";
+        String host1 = "master.spark.com:2181";
         ZooKeeper zk = connection(host1);
         initQueue(zk);
         joinQueue(zk, 1);
@@ -30,28 +30,13 @@ public class QueueZooKeeper {
     }
 
     public static void doAction(int client) throws Exception {
-        String host1 = "192.168.1.201:2181";
+        String host1 = "master.spark.com:2181";
         String host2 = "192.168.1.201:2182";
         String host3 = "192.168.1.201:2183";
 
-        ZooKeeper zk = null;
-        switch (client) {
-        case 1:
-            zk = connection(host1);
-            initQueue(zk);
-            joinQueue(zk, 1);
-            break;
-        case 2:
-            zk = connection(host2);
-            initQueue(zk);
-            joinQueue(zk, 2);
-            break;
-        case 3:
-            zk = connection(host3);
-            initQueue(zk);
-            joinQueue(zk, 3);
-            break;
-        }
+        ZooKeeper zk = connection(host1);
+        initQueue(zk);
+        joinQueue(zk, 1);
     }
 
     // 创建一个与服务器的连接

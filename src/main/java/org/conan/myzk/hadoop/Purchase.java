@@ -26,7 +26,7 @@ import org.conan.myhadoop.hdfs.HdfsDAO;
  */
 public class Purchase {
 
-    public static final String HDFS = "hdfs://192.168.1.210:9000";
+    public static final String HDFS = "hdfs://master.spark.com:8020";
     public static final Pattern DELIMITER = Pattern.compile("[\t,]");
 
     public static class PurchaseMapper extends Mapper<LongWritable, Text, Text, IntWritable> {
@@ -97,9 +97,9 @@ public class Purchase {
     public static JobConf config() {// Hadoop集群的远程配置信息
         JobConf conf = new JobConf(Purchase.class);
         conf.setJobName("purchase");
-        conf.addResource("classpath:/hadoop/core-site.xml");
-        conf.addResource("classpath:/hadoop/hdfs-site.xml");
-        conf.addResource("classpath:/hadoop/mapred-site.xml");
+//        conf.addResource("classpath:/hadoop/core-site.xml");
+//        conf.addResource("classpath:/hadoop/hdfs-site.xml");
+//        conf.addResource("classpath:/hadoop/mapred-site.xml");
         return conf;
     }
     

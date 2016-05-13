@@ -9,7 +9,7 @@ import org.conan.myhadoop.hdfs.HdfsDAO;
 
 public class Recommend {
 
-    public static final String HDFS = "hdfs://192.168.1.210:9000";
+    public static final String HDFS = "hdfs://master.spark.com:8020";
     public static final Pattern DELIMITER = Pattern.compile("[\t,]");
 
     public static void main(String[] args) throws Exception {
@@ -57,9 +57,9 @@ public class Recommend {
     public static JobConf config() {
         JobConf conf = new JobConf(Recommend.class);
         conf.setJobName("Recommand");
-        conf.addResource("classpath:/hadoop/core-site.xml");
-        conf.addResource("classpath:/hadoop/hdfs-site.xml");
-        conf.addResource("classpath:/hadoop/mapred-site.xml");
+//        conf.addResource("classpath:/hadoop/core-site.xml");
+//        conf.addResource("classpath:/hadoop/hdfs-site.xml");
+//        conf.addResource("classpath:/hadoop/mapred-site.xml");
         conf.set("io.sort.mb", "1024");
         return conf;
     }

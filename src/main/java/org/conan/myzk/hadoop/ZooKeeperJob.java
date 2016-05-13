@@ -27,28 +27,13 @@ public class ZooKeeperJob {
     }
 
     public static void doAction(int client) throws Exception {
-        String host1 = "192.168.1.201:2181";
-        String host2 = "192.168.1.201:2182";
-        String host3 = "192.168.1.201:2183";
+        String host1 = "master.spark.com:2181";
+//        String host2 = "192.168.1.201:2182";
+//        String host3 = "192.168.1.201:2183";
 
-        ZooKeeper zk = null;
-        switch (client) {
-        case 1:
-            zk = connection(host1);
-            initQueue(zk);
-            doPurchase(zk);
-            break;
-        case 2:
-            zk = connection(host2);
-            initQueue(zk);
-            doSell(zk);
-            break;
-        case 3:
-            zk = connection(host3);
-            initQueue(zk);
-            doOther(zk);
-            break;
-        }
+        ZooKeeper zk = connection(host1);
+        initQueue(zk);
+        doPurchase(zk);
     }
 
     // 创建一个与服务器的连接
