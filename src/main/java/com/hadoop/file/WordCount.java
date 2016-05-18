@@ -1,4 +1,4 @@
-package com.tuniu.file;
+package com.hadoop.file;
 
 import java.io.IOException;
 import java.util.StringTokenizer;

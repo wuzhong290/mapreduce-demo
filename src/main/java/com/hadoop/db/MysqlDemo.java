@@ -1,4 +1,4 @@
-package com.tuniu.db;
+package com.hadoop.db;
 
 import com.mysql.jdbc.StringUtils;
 import org.apache.commons.logging.Log;

@@ -1,4 +1,4 @@
-package com.tuniu.util;
+package com.hadoop.util;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;

@@ -1,4 +1,4 @@
-package com.tuniu.db;
+package com.hadoop.db;
 
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.io.Writable;
